@@ -1,0 +1,110 @@
+{
+    "form_name": "12",
+    "route": "/forms/12",
+    "components": [
+        {
+            "type": "text",
+            "key": "field_1",
+            "label": {
+                "en": "Field 1",
+                "zh": "字段 1",
+                "vi": "Trường 1"
+            },
+            "required": false,
+            "placeholder": {
+                "en": "",
+                "zh": "",
+                "vi": ""
+            }
+        },
+        {
+            "type": "select",
+            "key": "field_2",
+            "label": {
+                "en": "Field 2",
+                "zh": "字段 2",
+                "vi": "Trường 2"
+            },
+            "options": [
+                {
+                    "value": "option1",
+                    "en": "Option 1",
+                    "zh": "选项 1",
+                    "vi": "Tùy chọn 1"
+                },
+                {
+                    "value": "option2",
+                    "en": "Option 2",
+                    "zh": "选项 2",
+                    "vi": "Tùy chọn 2"
+                }
+            ],
+            "required": false,
+            "placeholder": {
+                "en": "",
+                "zh": "",
+                "vi": ""
+            }
+        },
+        {
+            "type": "checkbox",
+            "key": "field_3",
+            "label": {
+                "en": "Field 3",
+                "zh": "字段 3",
+                "vi": "Trường 3"
+            },
+            "options": [
+                {
+                    "value": "option1",
+                    "en": "Option 1",
+                    "zh": "选项 1",
+                    "vi": "Tùy chọn 1"
+                },
+                {
+                    "value": "option2",
+                    "en": "Option 2",
+                    "zh": "选项 2",
+                    "vi": "Tùy chọn 2"
+                }
+            ],
+            "required": false,
+            "placeholder": {
+                "en": "",
+                "zh": "",
+                "vi": ""
+            }
+        },
+        {
+            "type": "radio",
+            "key": "field_4",
+            "label": {
+                "en": "Field 4",
+                "zh": "字段 4",
+                "vi": "Trường 4"
+            },
+            "options": [
+                {
+                    "value": "option1",
+                    "en": "Option 1",
+                    "zh": "选项 1",
+                    "vi": "Tùy chọn 1"
+                },
+                {
+                    "value": "option2",
+                    "en": "Option 2",
+                    "zh": "选项 2",
+                    "vi": "Tùy chọn 2"
+                }
+            ],
+            "required": false,
+            "placeholder": {
+                "en": "",
+                "zh": "",
+                "vi": ""
+            }
+        }
+    ],
+    "created_at": "2025-04-21T10:09:34.243Z",
+    "created_by": "user_123"
+}

@@ -34,6 +34,13 @@ const componentTypes: ComponentType[] = [
     color: "bg-blue-500",
   },
   {
+    type: "textarea",
+    label: "Text Area",
+    icon: <Type className="h-5 w-5" />,
+    description: "Single line text textarea",
+    color: "bg-orange-500",
+  },
+  {
     type: "select",
     label: "Dropdown",
     icon: <ListOrdered className="h-5 w-5" />,

@@ -13,15 +13,27 @@ import { format } from "date-fns"
 import { cn } from "@/lib/utils"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { Calendar } from "@/components/ui/calendar"
+import { Textarea } from "./ui/textarea"
+
+type SupportedLanguage = 'en' | 'vi' | 'zh';
 
 export function FormPreview({ components }: { components: any[] }) {
-  const [language, setLanguage] = useState("en")
+  const [language, setLanguage] = useState<SupportedLanguage>("en")
   const [date, setDate] = useState<Date>()
   const [formValues, setFormValues] = useState<Record<string, any>>({})
 
   const handleInputChange = (key: string, value: any) => {
     setFormValues((prev) => ({ ...prev, [key]: value }))
   }
+  type SupportedLanguage = 'zh' | 'vi' | 'en';
+
+  const mappingLanguageSubmitButton: Record<SupportedLanguage, string> = {
+    zh: "提交",
+    vi: "Gửi",
+    en: "Submit"
+  };
+  
+  const buttonLabel = mappingLanguageSubmitButton[language];
 
   const handleCheckboxChange = (key: string, value: string, checked: boolean) => {
     const currentValues = formValues[key] || []
@@ -42,12 +54,16 @@ export function FormPreview({ components }: { components: any[] }) {
         <p className="text-muted-foreground">Add components to see a preview</p>
       </div>
     )
-  }
+  }const handleLanguageChange = (value: string) => {
+    if (['en', 'vi', 'zh'].includes(value)) {
+      setLanguage(value as SupportedLanguage);
+    }
+  };
 
   return (
     <div className="space-y-6">
       <div className="flex justify-end">
-        <Tabs value={language} onValueChange={setLanguage} className="w-fit">
+        <Tabs value={language} onValueChange={handleLanguageChange} className="w-fit">
           <TabsList className="bg-purple-100">
             <TabsTrigger value="en" className="data-[state=active]:bg-white data-[state=active]:text-purple-700">
               English
@@ -86,7 +102,23 @@ export function FormPreview({ components }: { components: any[] }) {
                   />
                 </div>
               )
-
+              case "textarea":
+                return (
+                  <div key={component.id} className="space-y-2">
+                    <Label htmlFor={component.key} className="flex items-center">
+                      {label}
+                      {isRequired && <span className="text-red-500 ml-1">*</span>}
+                    </Label>
+                    <Textarea
+                      id={component.key}
+                      placeholder={placeholder || label}
+                      required={isRequired}
+                      value={formValues[component.key] || ""}
+                      onChange={(e) => handleInputChange(component.key, e.target.value)}
+                      className="border-purple-200 focus:border-purple-400 focus:ring-purple-400"
+                    />
+                  </div>
+                )
             case "email":
               return (
                 <div key={component.id} className="space-y-2">
@@ -298,7 +330,7 @@ export function FormPreview({ components }: { components: any[] }) {
           type="submit"
           className="w-full bg-gradient-to-r from-purple-600 to-pink-500 hover:from-purple-700 hover:to-pink-600 text-white"
         >
-          Submit Form
+          {buttonLabel}
         </Button>
       </div>
     </div>

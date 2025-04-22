@@ -291,6 +291,8 @@ function ComponentItem({
     switch (component.type) {
       case "text":
         return <TypeIcon className="h-6 w-6" />
+        case "textarea":
+        return <TypeIcon className="h-6 w-6" />
       case "number":
         return <ListOrderedIcon className="h-6 w-6" />
       case "select":
@@ -322,6 +324,8 @@ function ComponentItem({
     switch (component.type) {
       case "text":
         return "Text Field"
+        case "textarea":
+        return "Text Area"
       case "number":
         return "Number Field"
       case "select":
@@ -353,6 +357,8 @@ function ComponentItem({
     switch (component.type) {
       case "text":
         return "bg-blue-500"
+        case "textarea":
+        return "bg-orange-500"
       case "number":
         return "bg-green-500"
       case "checkbox":
