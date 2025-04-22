@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -14,12 +14,36 @@ import { createForm } from '@/app/actions';
 import { v4 as uuidv4 } from 'uuid';
 import { toast } from '@/components/ui/use-toast';
 import { Sparkles } from 'lucide-react';
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectLabel,
+    SelectTrigger,
+    SelectValue,
+} from '@/components/ui/select';
+import { SelectGroup } from '@radix-ui/react-select';
+import { FormTypeType } from '@/utils/types/formTypeType';
+import formTypeApis from '@/apis/formTypeApis';
 
 export default function FormBuilder() {
     const router = useRouter();
     const [formName, setFormName] = useState('');
     const [components, setComponents] = useState<any[]>([]);
     const [activeTab, setActiveTab] = useState('design');
+    const [formTypes, setFormTypes] = useState<FormTypeType[]>([]);
+    const [selectedForm, setSelectedForm] = useState<FormTypeType>()
+
+    useEffect(() => {
+        const fetchListFormType = async () => {
+            const res = await formTypeApis.getAll();
+            if (res) {
+                console.log(res);
+                setFormTypes(res.data);
+            }
+        };
+        fetchListFormType();
+    }, []);
 
     // Cập nhật hàm addComponent để đảm bảo các component mới có đầy đủ thuộc tính
     const addComponent = (type: string) => {
@@ -92,7 +116,7 @@ export default function FormBuilder() {
         // Prepare form data for submission
         const formData = {
             form_name: formName,
-            route: `/forms/${formName.toLowerCase().replace(/\s+/g, '-')}`,
+            route: `${formName.toLowerCase().replace(/\s+/g, '-')}`,
             components: components.map(({ id, ...comp }) => comp),
             created_at: new Date().toISOString(),
             created_by: 'user_123', // In a real app, this would be the authenticated user's ID
@@ -116,6 +140,17 @@ export default function FormBuilder() {
         //   })
         // }
     };
+
+    const handleChangeForm = (value: string) => {
+        // Lưu giá trị chọn vào state hoặc xử lý logic khác
+        console.log("Selected form ID:", value);
+        const data = formTypes.find(item => item.id.toString() === value)
+        if(data){
+            setSelectedForm(data)
+        }
+        // Ví dụ: setFormId(value); // Nếu bạn có state formId
+    };
+    
 
     return (
         <div className="min-h-screen bg-gradient-to-b from-purple-50 to-white">
@@ -154,20 +189,64 @@ export default function FormBuilder() {
                                     <CardContent className="p-4">
                                         <div className="space-y-4">
                                             <div className="space-y-2">
-                                                <Label htmlFor="form-name">Form Name</Label>
+                                                <Label htmlFor="form-name">Select a form</Label>
+                                                <Select value={selectedForm?.id.toString() || ""} onValueChange={handleChangeForm}>
+                                                    <SelectTrigger>
+                                                        <SelectValue placeholder="Select a form" />
+                                                    </SelectTrigger>
+                                                    <SelectContent>
+                                                        <SelectGroup>
+                                                            {formTypes.length > 0 &&
+                                                                formTypes.map((item, index) => (
+                                                                    <SelectItem
+                                                                        value={item.id.toString()}
+                                                                        key={index}
+                                                                    >
+                                                                        {item.name_en}
+                                                                    </SelectItem>
+                                                                ))}
+                                                        </SelectGroup>
+                                                    </SelectContent>
+                                                </Select>
+                                            </div>
+                                            <div className="space-y-2">
+                                                <Label htmlFor="form-name">Chinese Name</Label>
                                                 <Input
                                                     id="form-name"
-                                                    value={formName}
+                                                    value={selectedForm?.name_zh || ""}
                                                     onChange={(e) => setFormName(e.target.value)}
                                                     placeholder="Enter form name"
-                                                    className="border-purple-200 focus:border-purple-400 focus:ring-purple-400"
+                                                    className="border-purple-200 focus:border-purple-400 focus:ring-purple-400 bg-purple-50"
+                                                    disabled
+                                                />
+                                            </div>
+                                            <div className="space-y-2">
+                                                <Label htmlFor="form-name">English Name</Label>
+                                                <Input
+                                                    id="form-name"
+                                                    value={selectedForm?.name_en || ""}
+                                                    onChange={(e) => setFormName(e.target.value)}
+                                                    placeholder="Enter form name"
+                                                    className="border-purple-200 focus:border-purple-400 focus:ring-purple-400 bg-purple-50" 
+                                                    disabled
+                                                />
+                                            </div>
+                                            <div className="space-y-2">
+                                                <Label htmlFor="form-name">Vietnamese Name</Label>
+                                                <Input
+                                                    id="form-name"
+                                                    value={selectedForm?.name_vn || ""}
+                                                    onChange={(e) => setFormName(e.target.value)}
+                                                    placeholder="Enter form name"
+                                                    className="border-purple-200 focus:border-purple-400 focus:ring-purple-400 bg-purple-50"
+                                                    disabled
                                                 />
                                             </div>
                                             <div className="text-sm p-2 bg-purple-50 rounded-md">
-                                                <span className="font-medium">Route:</span>{' '}
-                                                {formName
-                                                    ? `/forms/${formName.toLowerCase().replace(/\s+/g, '-')}`
-                                                    : '/forms/your-form-name'}
+                                                <span className="font-medium">Tag:</span>{' '}
+                                                {selectedForm
+                                                    ? `${selectedForm.tag.toLowerCase().replace(/\s+/g, '-')}`
+                                                    : 'your-form-name'}
                                             </div>
                                         </div>
                                     </CardContent>
